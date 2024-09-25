@@ -1,0 +1,5 @@
+// 追加新的消息到 chat-box 中
+$("#chat-box").html('<%= j render partial: "messages", locals: { messages: @messages } %>');
+
+// 清空输入框
+$('input[name="message"]').val('');

@@ -21,6 +21,12 @@ class ChatController < ApplicationController
       session[:messages] = @messages
 
       Rails.logger.info "Messages: #{@messages.inspect}"
+
+      # 通过 respond_to 返回不同的格式，支持 HTML 和 JS
+      respond_to do |format|
+        format.html { redirect_to chat_path }  # 如果是 HTML 请求，重定向到聊天页面
+        format.js   # 如果是 Ajax 请求，渲染 JS 文件
+      end
     end
   end
 end
