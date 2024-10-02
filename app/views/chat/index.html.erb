@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
+  <meta charset="UTF-8">
   <title>Chat App</title>
   <style>
       body {
@@ -14,18 +15,53 @@
           height: 100vh;
       }
 
+      .chat-wrapper {
+          display: flex;
+          width: 100%;
+          max-width: 900px;
+          height: 600px; /* 固定整体窗口高度 */
+      }
+
+      .sidebar {
+          width: 25%;
+          max-width: 200px;
+          background: #007bff;
+          color: #fff;
+          border-radius: 8px 0 0 8px;
+          overflow-y: auto;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .sidebar h2 {
+          padding: 10px;
+          text-align: center;
+      }
+
+      .chat-item {
+          padding: 15px;
+          border-bottom: 1px solid #0056b3;
+          cursor: pointer;
+      }
+
+      .chat-item:hover {
+          background: #0056b3;
+      }
+
       .container {
-          width: 80%;
+          width: 75%;
           max-width: 600px;
           background: #fff;
-          border-radius: 8px;
+          border-radius: 0 8px 8px 0;
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
           overflow: hidden;
+          display: flex;
+          flex-direction: column;
       }
 
       #chat-box {
           padding: 20px;
-          max-height: 400px;
+          flex-grow: 1; /* 保持 chat-box 伸展 */
+          max-height: 500px; /* 固定聊天框高度 */
           overflow-y: auto;
           border-bottom: 1px solid #ddd;
       }
@@ -47,10 +83,6 @@
           background: #f1f1f1;
           color: #000;
           align-self: flex-start;
-      }
-
-      .message strong {
-          font-weight: bold;
       }
 
       form {
@@ -81,18 +113,108 @@
   </style>
 </head>
 <body>
-<div class="container">
-  <div id="chat-box">
-    <% @messages.each do |message| %>
-      <div class="message <%= message["user"] %>">
-        <strong><%= message["user"] %>:</strong> <%= message["text"] %>
+<div class="chat-wrapper">
+  <!-- Sidebar for chat history -->
+  <div class="sidebar">
+    <h2>Chat History</h2>
+    <% @conversations.each_with_index do |conversation, index| %>
+      <div class="chat-item" data-conversation-id="<%= index %>">
+        会话 <%= index + 1 %>
       </div>
     <% end %>
+    <!-- 新增一个会话的按钮 -->
+    <div style="text-align: center; padding: 10px;">
+      <button id="new-conversation" style="font-size: 20px; padding: 5px 10px;">＋</button>
+    </div>
   </div>
-  <%= form_with url: chat_path, method: :post, remote: true do |form| %>
-    <%= form.text_field :message, placeholder: "Type your message...", required: true %>
-    <%= form.submit "Send" %>
-  <% end %>
+
+  <!-- Main Chat Container -->
+  <div class="container">
+    <div id="chat-box">
+      <% @messages.each do |message| %>
+        <div class="message <%= message[:user] %>">
+          <strong><%= message[:user] %>:</strong> <%= message[:text] %>
+        </div>
+      <% end %>
+    </div>
+    <%= form_with url: chat_path, method: :post do |form| %>
+      <%= form.text_field :message, placeholder: "Type your message...", required: true %>
+      <%= form.submit "Send" %>
+    <% end %>
+  </div>
 </div>
+
+<script>
+    // 初始化时加载第一个会话
+    document.addEventListener("DOMContentLoaded", function() {
+        loadConversation(0); // 初始加载第一个会话
+    });
+
+    document.querySelectorAll('.chat-item').forEach(function(item) {
+        item.addEventListener('click', function() {
+            var conversationId = this.getAttribute('data-conversation-id');
+            loadConversation(conversationId);
+        });
+    });
+
+    function loadConversation(conversationId) {
+        fetch(`/conversations/${conversationId}`)
+            .then(response => response.json())
+            .then(data => {
+                var chatBox = document.getElementById('chat-box');
+                chatBox.innerHTML = ''; // 清空当前聊天框
+                data.messages.forEach(function(message) {
+                    var messageDiv = document.createElement('div');
+                    messageDiv.className = 'message ' + message.user;
+                    messageDiv.innerHTML = '<strong>' + message.user + ':</strong> ' + message.text;
+                    chatBox.appendChild(messageDiv);
+                });
+
+                // 滚动到底部，确保显示最新消息
+                setTimeout(function() {
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }, 50);
+            });
+    }
+
+    // 提交表单后自动滚动到底部
+    document.addEventListener("turbo:submit-end", function() {
+        var chatBox = document.getElementById('chat-box');
+        setTimeout(function() {
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }, 50);
+
+        // 清空消息输入框
+        var messageInput = document.querySelector('input[type="text"]');
+        if (messageInput) {
+            messageInput.value = '';  // 清空输入框内容
+        }
+    });
+
+    document.getElementById('new-conversation').addEventListener('click', function() {
+        fetch('/conversations/new', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                // 添加新会话到侧边栏
+                var sidebar = document.querySelector('.sidebar');
+                var newChatItem = document.createElement('div');
+                newChatItem.className = 'chat-item';
+                newChatItem.setAttribute('data-conversation-id', data.id);
+                newChatItem.textContent = '会话 ' + (data.id + 1);
+                sidebar.insertBefore(newChatItem, sidebar.lastElementChild); // 插入到 + 按钮之前
+
+                // 自动打开新创建的会话
+                loadConversation(data.id);
+            });
+    });
+
+</script>
 </body>
 </html>

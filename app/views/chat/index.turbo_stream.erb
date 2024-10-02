@@ -1,0 +1,7 @@
+<%= turbo_stream.append "chat-box" do %>
+  <% @new_messages.each do |message| %>
+    <div class="message <%= message[:user] %>">
+      <strong><%= message[:user] %>:</strong> <%= message[:text] %>
+    </div>
+  <% end %>
+<% end %>
