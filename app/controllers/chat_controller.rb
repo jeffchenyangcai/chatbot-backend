@@ -3,8 +3,11 @@ class ChatController < ApplicationController
 
   # 主聊天页面
   def index
-    session[:messages] ||= [{ user: 'Chatbot', text: '你好，请问我问题：' }]
-    @messages = session[:messages]
+    session[:conversations] ||= []
+    session[:current_conversation_id] ||= 0 # 默认值为 0
+
+    # 获取当前会话的消息
+    @messages = session[:conversations][session[:current_conversation_id]] || [{ user: 'Chatbot', text: '你好，请问我问题：' }]
 
     if params[:message].present?
       user_message = { user: 'User', text: params[:message] }
@@ -14,8 +17,8 @@ class ChatController < ApplicationController
       @messages << user_message
       @messages << chatbot_message
 
-      # 保存当前会话到 session[:conversations]
-      save_current_conversation
+      # 保存当前会话
+      save_current_conversation(@messages)  # 传递当前会话的消息
 
       # 传递两条新消息给视图层
       @new_messages = [user_message, chatbot_message]
@@ -29,14 +32,9 @@ class ChatController < ApplicationController
 
   # 显示特定的会话
   def show
-
-    # @conversation_id = params[:id].to_i
-    # session[:current_conversation_id] = @conversation_id # 更新当前会话ID
-    # session[:messages] = session[:conversations][@conversation_id] || []
-    # @messages = session[:messages]
-
     conversation_id = params[:id].to_i
-    @messages = session[:conversations][conversation_id] || []
+    session[:current_conversation_id] = conversation_id # 更新当前会话ID
+    @messages = session[:conversations][conversation_id] || [] # 获取当前会话的消息
 
     respond_to do |format|
       format.json { render json: { messages: @messages } }
@@ -68,6 +66,11 @@ class ChatController < ApplicationController
     if session[:conversations] && session[:conversations][conversation_id]
       session[:conversations].delete_at(conversation_id)  # 删除会话
 
+      # 如果删除的是当前会话，则更新当前会话 ID
+      if session[:current_conversation_id] == conversation_id
+        session[:current_conversation_id] = [0, session[:conversations].size - 1].min  # 重置为第一个会话
+      end
+
       render json: { message: '会话已删除' }, status: :ok
     else
       render json: { error: '未找到会话' }, status: :not_found
@@ -83,12 +86,8 @@ class ChatController < ApplicationController
   end
 
   # 保存当前会话
-  def save_current_conversation
-    if session[:current_conversation_id]
-      session[:conversations][session[:current_conversation_id]] = session[:messages].dup
-    else
-      session[:conversations] << session[:messages].dup
-      session[:current_conversation_id] = session[:conversations].size - 1
-    end
+  def save_current_conversation(messages)
+    # 更新当前会话的消息
+    session[:conversations][session[:current_conversation_id]] = messages.dup
   end
 end

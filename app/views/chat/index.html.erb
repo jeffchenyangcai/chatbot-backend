@@ -121,6 +121,12 @@
       button:hover {
           background: #0056b3;
       }
+
+      .chat-item.active {
+          background-color: #0056b3;
+          font-weight: bold;
+      }
+
   </style>
 </head>
 <body>
@@ -167,8 +173,17 @@
         item.addEventListener('click', function() {
             var conversationId = this.getAttribute('data-conversation-id');
             loadConversation(conversationId);
+
+            // 移除其他会话的高亮
+            document.querySelectorAll('.chat-item').forEach(function(el) {
+                el.classList.remove('active');
+            });
+
+            // 添加高亮到当前会话
+            this.classList.add('active');
         });
     });
+
 
     document.querySelectorAll('.delete-conversation').forEach(function(button) {
         button.addEventListener('click', function(event) {
