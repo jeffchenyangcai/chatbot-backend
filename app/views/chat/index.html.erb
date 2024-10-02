@@ -58,6 +58,17 @@
           flex-direction: column;
       }
 
+      .delete-conversation {
+          float: right;
+          margin-right: 10px;
+          color: #fff;
+          cursor: pointer;
+      }
+
+      .delete-conversation:hover {
+          color: #000000;
+      }
+
       #chat-box {
           padding: 20px;
           flex-grow: 1; /* 保持 chat-box 伸展 */
@@ -120,6 +131,8 @@
     <% @conversations.each_with_index do |conversation, index| %>
       <div class="chat-item" data-conversation-id="<%= index %>">
         会话 <%= index + 1 %>
+        <!-- 添加删除图标 -->
+        <span class="delete-conversation" data-conversation-id="<%= index %>">🗑️</span>
       </div>
     <% end %>
     <!-- 新增一个会话的按钮 -->
@@ -157,6 +170,14 @@
         });
     });
 
+    document.querySelectorAll('.delete-conversation').forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            event.stopPropagation();  // 防止触发点击会话的事件
+            var conversationId = this.getAttribute('data-conversation-id');
+            deleteConversation(conversationId);
+        });
+    });
+    
     function loadConversation(conversationId) {
         fetch(`/conversations/${conversationId}`)
             .then(response => response.json())
@@ -215,6 +236,43 @@
             });
     });
 
+    // 删除会话
+    function deleteConversation(conversationId) {
+        if (!confirm("确定要删除这个会话吗？")) {
+            return;
+        }
+
+        fetch(`/conversations/${conversationId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    // 从侧边栏移除该会话
+                    var chatItem = document.querySelector(`.chat-item[data-conversation-id="${conversationId}"]`);
+                    if (chatItem) {
+                        chatItem.remove();
+                    }
+
+                    // 如果是当前会话，清空聊天框
+                    var chatBox = document.getElementById('chat-box');
+                    if (parseInt(conversationId) === 0) {
+                        chatBox.innerHTML = ''; // 清空当前聊天框
+                    }
+
+                    alert("会话已删除");
+                } else {
+                    alert("删除失败，请稍后再试。");
+                }
+            })
+            .catch(error => {
+                console.error('删除会话时出错:', error);
+                alert("删除失败，请稍后再试。");
+            });
+    }
 </script>
 </body>
 </html>

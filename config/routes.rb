@@ -26,4 +26,6 @@ Rails.application.routes.draw do
 
   # 添加用于创建新会话的路由
   post 'conversations/new', to: 'chat#create', as: 'new_conversation'
+
+  delete 'conversations/:id', to: 'chat#destroy'
 end

@@ -60,6 +60,20 @@ class ChatController < ApplicationController
       format.json { render json: { id: new_conversation_id, messages: new_conversation }, status: :created }
     end
   end
+
+  # 删除会话
+  def destroy
+    conversation_id = params[:id].to_i
+
+    if session[:conversations] && session[:conversations][conversation_id]
+      session[:conversations].delete_at(conversation_id)  # 删除会话
+
+      render json: { message: '会话已删除' }, status: :ok
+    else
+      render json: { error: '未找到会话' }, status: :not_found
+    end
+  end
+
   private
 
   # 加载所有会话
