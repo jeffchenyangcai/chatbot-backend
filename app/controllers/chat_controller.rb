@@ -1,76 +1,69 @@
+# app/controllers/chat_controller.rb
+
 class ChatController < ApplicationController
-  before_action :load_conversations, only: [:index, :show]
+  before_action :authenticate_user!  # 确保用户已登录
+  before_action :load_user_conversations, only: [:index, :show]
 
-  # 主聊天页面
   def index
-    session[:conversations] ||= []
-    session[:current_conversation_id] ||= 0 # 默认值为 0
+    # 默认加载显示最近的一次会话
+    @current_conversation = @conversations.last
 
-    # 获取当前会话的消息
-    @messages = session[:conversations][session[:current_conversation_id]] || [{ user: 'Chatbot', text: '你好，请问我问题：' }]
+    @first_conversation_id = @conversations.minimum(:id) # 获取最小的 conversation.id
 
+    # 如果有当前会话，加载会话中的所有消息
+    @messages = @current_conversation&.messages || [{ user: 'Chatbot', text: '你好，请问有什么问题？' }]
+
+    # 如果用户发送了新消息
     if params[:message].present?
-      user_message = { user: 'User', text: params[:message] }
-      chatbot_message = { user: 'Chatbot', text: '这是我的固定回复' }
+      # 创建用户消息
+      user_message = @current_conversation.messages.create(user: current_user.username, text: params[:message])
 
-      # 将新消息加入当前会话
-      @messages << user_message
-      @messages << chatbot_message
+      # 创建 Chatbot 回复消息
+      chatbot_message = @current_conversation.messages.create(user: 'Chatbot', text: '这是我的固定回复')
 
-      # 保存当前会话
-      save_current_conversation(@messages)  # 传递当前会话的消息
-
-      # 传递两条新消息给视图层
+      # 将新消息传递给视图层
       @new_messages = [user_message, chatbot_message]
 
       respond_to do |format|
         format.turbo_stream
-        format.html { redirect_to chat_path }  # 兼容传统 HTML 提交
+        format.html { redirect_to chat_path }
       end
     end
   end
 
-  # 显示特定的会话
+
+
+  # 显示特定会话
   def show
-    conversation_id = params[:id].to_i
-    session[:current_conversation_id] = conversation_id # 更新当前会话ID
-    @messages = session[:conversations][conversation_id] || [] # 获取当前会话的消息
+    @current_conversation = Conversation.find_by(id: params[:id])
+
+    if @current_conversation.nil?
+      render json: { error: '未找到会话' }, status: :not_found
+      return
+    end
+
+    @messages = @current_conversation.messages
 
     respond_to do |format|
       format.json { render json: { messages: @messages } }
-      format.html { render :index }  # 允许用户从 HTML 直接访问
+      format.html { render :index }  # 显示会话消息
     end
   end
 
   # 创建新会话
   def create
-    session[:conversations] ||= []
-    # 创建一个新的会话，默认有一条消息
-    new_conversation = [{ user: 'Chatbot', text: '你好，请问我问题：' }]
-    session[:conversations] << new_conversation
+    new_conversation = current_user.conversations.create
+    new_conversation.messages.create(user: 'Chatbot', text: '这是我的固定回复')
 
-    # 返回最新的会话 ID
-    new_conversation_id = session[:conversations].size - 1
-    session[:current_conversation_id] = new_conversation_id
-
-    # 重定向到新的会话
-    respond_to do |format|
-      format.json { render json: { id: new_conversation_id, messages: new_conversation }, status: :created }
-    end
+    render json: { id: new_conversation.id, messages: new_conversation.messages }, status: :created
   end
 
   # 删除会话
   def destroy
-    conversation_id = params[:id].to_i
+    conversation = current_user.conversations.find_by(id: params[:id])
 
-    if session[:conversations] && session[:conversations][conversation_id]
-      session[:conversations].delete_at(conversation_id)  # 删除会话
-
-      # 如果删除的是当前会话，则更新当前会话 ID
-      if session[:current_conversation_id] == conversation_id
-        session[:current_conversation_id] = [0, session[:conversations].size - 1].min  # 重置为第一个会话
-      end
-
+    if conversation
+      conversation.destroy
       render json: { message: '会话已删除' }, status: :ok
     else
       render json: { error: '未找到会话' }, status: :not_found
@@ -79,15 +72,29 @@ class ChatController < ApplicationController
 
   private
 
-  # 加载所有会话
-  def load_conversations
-    session[:conversations] ||= []
-    @conversations = session[:conversations]
+  # 加载当前用户的所有会话
+  def load_user_conversations
+    @conversations = Conversation.where(user_id: @current_user.id)
   end
 
-  # 保存当前会话
-  def save_current_conversation(messages)
-    # 更新当前会话的消息
-    session[:conversations][session[:current_conversation_id]] = messages.dup
+  # 保存当前会话的消息
+  def save_current_conversation(conversation, messages)
+    conversation.messages.create(messages)
+  end
+
+  # 模拟获取当前用户（假设存在用户ID 1）
+  def current_user
+    # 假设使用一个 ID 为 1 的假用户
+    @current_user ||= User.find_or_create_by(id: 1) do |user|
+      user.username = 'testuser'
+      user.password_digest = 'password'  # 简单的密码，开发测试用
+    end
+  end
+
+  # 模拟用户认证（跳过实际认证）
+  def authenticate_user!
+    unless current_user
+      redirect_to login_path, alert: '请先登录'
+    end
   end
 end
