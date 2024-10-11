@@ -191,7 +191,6 @@
         });
     });
 
-
     document.querySelectorAll('.delete-conversation').forEach(function(button) {
         button.addEventListener('click', function(event) {
             event.stopPropagation();  // 防止触发点击会话的事件
@@ -245,16 +244,32 @@
         })
             .then(response => response.json())
             .then(data => {
-                // 添加新会话到侧边栏
+                // 添加新会话到侧边栏，并确保包含删除按钮
                 var sidebar = document.querySelector('.sidebar');
                 var newChatItem = document.createElement('div');
                 newChatItem.className = 'chat-item';
                 newChatItem.setAttribute('data-conversation-id', data.id);
-                newChatItem.textContent = '会话 ' + (data.id + 1);
-                sidebar.insertBefore(newChatItem, sidebar.lastElementChild); // 插入到 + 按钮之前
+                newChatItem.innerHTML = `
+          会话 ${data.id + 1}
+          <span class="delete-conversation" data-conversation-id="${data.id}">🗑️</span>
+        `;
+                sidebar.insertBefore(newChatItem, sidebar.lastElementChild);
 
+                // 重新绑定删除按钮的事件监听器
+                newChatItem.querySelector('.delete-conversation').addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    deleteConversation(data.id);
+                });
                 // 自动打开新创建的会话
                 loadConversation(data.id);
+
+                // 移除其他会话的高亮
+                document.querySelectorAll('.chat-item').forEach(function(el) {
+                    el.classList.remove('active');
+                });
+
+                // 高亮新会话
+                newChatItem.classList.add('active');
             });
     });
 
