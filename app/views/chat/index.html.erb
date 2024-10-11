@@ -135,10 +135,10 @@
   <div class="sidebar">
     <h2>Chat History</h2>
     <% @conversations.each_with_index do |conversation, index| %>
-      <div class="chat-item" data-conversation-id="<%= index %>">
-        会话 <%= index + 1 %>
+      <div class="chat-item" data-conversation-id="<%= conversation.id %>">
+        会话 <%= conversation.id + 1 %>
         <!-- 添加删除图标 -->
-        <span class="delete-conversation" data-conversation-id="<%= index %>">🗑️</span>
+        <span class="delete-conversation" data-conversation-id="<%= conversation.id %>">🗑️</span>
       </div>
     <% end %>
     <!-- 新增一个会话的按钮 -->
@@ -151,7 +151,7 @@
   <div class="container">
     <div id="chat-box">
       <% @messages.each do |message| %>
-        <div class="message <%= message[:user] %>">
+        <div class="message <%= message[:user] == "Chatbot" ? 'Chatbot' : 'User' %>">
           <strong><%= message[:user] %>:</strong> <%= message[:text] %>
         </div>
       <% end %>
@@ -161,12 +161,19 @@
       <%= form.submit "Send" %>
     <% end %>
   </div>
+
 </div>
 
 <script>
     // 初始化时加载第一个会话
     document.addEventListener("DOMContentLoaded", function() {
-        loadConversation(0); // 初始加载第一个会话
+        var firstConversationId = <%= @first_conversation_id %>; // 从后端获取最小的 conversation.id
+        loadConversation(firstConversationId); // 初始加载最小的会话
+        // 自动给第一个会话添加高亮
+        var firstChatItem = document.querySelector('.chat-item[data-conversation-id="' + firstConversationId + '"]');
+        if (firstChatItem) {
+            firstChatItem.classList.add('active');
+        }
     });
 
     document.querySelectorAll('.chat-item').forEach(function(item) {
@@ -201,7 +208,7 @@
                 chatBox.innerHTML = ''; // 清空当前聊天框
                 data.messages.forEach(function(message) {
                     var messageDiv = document.createElement('div');
-                    messageDiv.className = 'message ' + message.user;
+                    messageDiv.className = 'message ' + (message.user == "Chatbot" ? 'Chatbot' : 'User');
                     messageDiv.innerHTML = '<strong>' + message.user + ':</strong> ' + message.text;
                     chatBox.appendChild(messageDiv);
                 });
