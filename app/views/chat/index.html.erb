@@ -5,128 +5,164 @@
   <title>Chat App</title>
   <style>
       body {
-          font-family: Arial, sans-serif;
-          background-color: #f4f4f4;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
           margin: 0;
           padding: 0;
           display: flex;
           justify-content: center;
           align-items: center;
           height: 100vh;
+          overflow: hidden;
       }
 
       .chat-wrapper {
           display: flex;
           width: 100%;
-          max-width: 900px;
-          height: 600px; /* 固定整体窗口高度 */
+          height: 100%;
+          max-width: 1200px;
+          max-height: 800px;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+          border-radius: 12px;
+          overflow: hidden;
+          background: #fff;
       }
 
       .sidebar {
           width: 25%;
-          max-width: 200px;
           background: #007bff;
           color: #fff;
-          border-radius: 8px 0 0 8px;
+          border-radius: 12px 0 0 12px;
           overflow-y: auto;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+          display: flex;
+          flex-direction: column;
       }
 
       .sidebar h2 {
-          padding: 10px;
+          padding: 20px;
           text-align: center;
+          margin: 0;
+          background: #0056b3;
+          border-bottom: 1px solid #004080;
       }
 
       .chat-item {
           padding: 15px;
           border-bottom: 1px solid #0056b3;
           cursor: pointer;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
       }
 
       .chat-item:hover {
           background: #0056b3;
       }
 
-      .container {
-          width: 75%;
-          max-width: 600px;
-          background: #fff;
-          border-radius: 0 8px 8px 0;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
+      .chat-item.active {
+          background: #004080;
+          font-weight: bold;
       }
 
       .delete-conversation {
-          float: right;
-          margin-right: 10px;
           color: #fff;
           cursor: pointer;
+          font-size: 18px;
+          transition: color 0.3s;
       }
 
       .delete-conversation:hover {
-          color: #000000;
+          color: #ff4d4d;
+      }
+
+      .container {
+          width: 75%;
+          display: flex;
+          flex-direction: column;
+          background: #f9f9f9;
+          border-radius: 0 12px 12px 0;
+          box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
       }
 
       #chat-box {
           padding: 20px;
-          flex-grow: 1; /* 保持 chat-box 伸展 */
-          max-height: 500px; /* 固定聊天框高度 */
+          flex-grow: 1;
           overflow-y: auto;
           border-bottom: 1px solid #ddd;
+          background: #fff;
+          border-radius: 0 12px 0 0;
       }
 
       .message {
           margin: 10px 0;
-          padding: 10px;
-          border-radius: 8px;
+          padding: 15px;
+          border-radius: 12px;
           max-width: 80%;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       }
 
       .User {
           background: #25d96e;
           color: #fff;
           align-self: flex-end;
+          border-bottom-right-radius: 0;
       }
 
       .Chatbot {
           background: #f1f1f1;
           color: #000;
           align-self: flex-start;
+          border-bottom-left-radius: 0;
       }
 
       form {
           display: flex;
           padding: 10px;
           background: #f1f1f1;
+          border-top: 1px solid #ddd;
+          border-radius: 0 0 12px 0;
       }
 
       input[type="text"] {
           flex: 1;
-          padding: 10px;
+          padding: 15px;
           border: none;
-          border-radius: 8px 0 0 8px;
+          border-radius: 12px 0 0 12px;
+          background: #fff;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       }
 
       button {
-          padding: 10px 20px;
+          padding: 15px 25px;
           border: none;
           background: #007bff;
           color: #fff;
-          border-radius: 0 8px 8px 0;
+          border-radius: 0 12px 12px 0;
           cursor: pointer;
+          transition: background 0.3s;
       }
 
       button:hover {
           background: #0056b3;
       }
 
-      .chat-item.active {
-          background-color: #0056b3;
-          font-weight: bold;
+      #new-conversation {
+          background: #0056b3;
+          border: none;
+          color: #fff;
+          font-size: 24px;
+          padding: 10px 20px;
+          border-radius: 50%;
+          cursor: pointer;
+          transition: background 0.3s;
+          margin: 20px auto;
+          display: block;
       }
 
+      #new-conversation:hover {
+          background: #004080;
+      }
   </style>
 </head>
 <body>
@@ -137,14 +173,10 @@
     <% @conversations.each_with_index do |conversation, index| %>
       <div class="chat-item" data-conversation-id="<%= conversation.id %>">
         会话 <%= conversation.id + 1 %>
-        <!-- 添加删除图标 -->
         <span class="delete-conversation" data-conversation-id="<%= conversation.id %>">🗑️</span>
       </div>
     <% end %>
-    <!-- 新增一个会话的按钮 -->
-    <div style="text-align: center; padding: 10px;">
-      <button id="new-conversation" style="font-size: 20px; padding: 5px 10px;">＋</button>
-    </div>
+    <button id="new-conversation">＋</button>
   </div>
 
   <!-- Main Chat Container -->
@@ -161,7 +193,6 @@
       <%= form.submit "Send" %>
     <% end %>
   </div>
-
 </div>
 
 <script>
@@ -198,7 +229,7 @@
             deleteConversation(conversationId);
         });
     });
-    
+
     function loadConversation(conversationId) {
         fetch(`/conversations/${conversationId}`)
             .then(response => response.json())
