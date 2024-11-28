@@ -31,6 +31,8 @@ class ChatController < ApplicationController
     end
   end
 
+
+
   # 显示特定会话
   def show
     @current_conversation = Conversation.find_by(id: params[:id])
@@ -42,7 +44,10 @@ class ChatController < ApplicationController
 
     @messages = @current_conversation.messages
 
-    render json: { messages: @messages }
+    respond_to do |format|
+      format.json { render json: { messages: @messages } }
+      format.html { render :index }  # 显示会话消息
+    end
   end
 
   # 创建新会话
@@ -65,12 +70,6 @@ class ChatController < ApplicationController
     end
   end
 
-  # 获取所有会话 ID
-  def conversations
-    conversation_ids = current_user.conversations.pluck(:id)
-    render json: { conversation_ids: conversation_ids }
-  end
-
   private
 
   # 加载当前用户的所有会话
@@ -83,7 +82,7 @@ class ChatController < ApplicationController
     conversation.messages.create(messages)
   end
 
-  # MOCK获取当前用户（假设存在用户ID 1）
+  # 模拟获取当前用户（假设存在用户ID 1）
   def current_user
     # 假设使用一个 ID 为 1 的假用户
     @current_user ||= User.find_or_create_by(id: 1) do |user|

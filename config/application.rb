@@ -23,6 +23,5 @@ module Temp925
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
-    config.api_only = true #暴露端口，忽略自带的前端
   end
 end

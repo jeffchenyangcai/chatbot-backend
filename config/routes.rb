@@ -14,21 +14,18 @@ Rails.application.routes.draw do
 
   root 'chat#index'
 
-  # 获取所有的 conversationid
-  get 'api/conversations', to: 'chat#conversations'
-
   # 定义聊天页面的主路由
   get 'chat', to: 'chat#index'
 
   # 定义根据会话 ID 显示特定对话记录的路由
-  get 'api/chat/:id', to: 'chat#show', as: 'conversation'
+  get 'conversations/:id', to: 'chat#show', as: 'conversation'
   # 在视图中你可以用 conversation_path(1) 来生成 /conversations/1 的链接。
 
   # 添加一个 POST 路由用于发送消息
   post 'chat', to: 'chat#index'
 
   # 添加用于创建新会话的路由
-  post 'chat/new', to: 'chat#create', as: 'new_conversation'
+  post 'conversations/new', to: 'chat#create', as: 'new_conversation'
 
-  delete 'chat/:id', to: 'chat#destroy'
+  delete 'conversations/:id', to: 'chat#destroy'
 end
