@@ -25,10 +25,26 @@ Rails.application.routes.draw do
   # 在视图中你可以用 conversation_path(1) 来生成 /conversations/1 的链接。
 
   # 添加一个 POST 路由用于发送消息
-  post 'chat', to: 'chat#index'
+  post 'api/chat', to: 'chat#index'
 
   # 添加用于创建新会话的路由
   post 'chat/new', to: 'chat#create', as: 'new_conversation'
 
+  # API 聊天相关路由
+  post 'api/chat/:id/update', to: 'chat#update'
+
+#   curl -X PUT http://localhost:3000/chat/1 \
+#     -H "Content-Type: application/json" \
+#     -d '{
+#   "messages": [
+#     {
+#       "user": "Chatbot",
+#       "text": "这是我的固定回复",
+#       "created_at": "2024-10-11T03:38:29.949Z",
+#       "updated_at": "2024-10-11T03:38:29.949Z",
+#       "user_id": null
+#     }
+#   ]
+# }'
   delete 'chat/:id', to: 'chat#destroy'
 end

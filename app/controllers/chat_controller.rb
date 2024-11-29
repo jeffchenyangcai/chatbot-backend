@@ -71,6 +71,47 @@ class ChatController < ApplicationController
     render json: { conversation_ids: conversation_ids }
   end
 
+  # 更新会话（添加新消息）
+  def update
+    conversation = current_user.conversations.find_by(id: params[:id])
+
+    if conversation.nil?
+      render json: { error: '未找到会话' }, status: :not_found
+      return
+    end
+
+    # 解析请求中的消息数据
+    messages = params[:messages]
+
+    if messages.nil? || messages.empty?
+      render json: { error: '消息不能为空' }, status: :unprocessable_entity
+      return
+    end
+
+    # 创建新消息并保存到数据库
+    new_messages = messages.map do |message|
+      conversation.messages.create(
+        user: message[:user],
+        text: message[:text],
+        created_at: message[:created_at],
+        updated_at: message[:updated_at],
+        user_id: message[:user_id]
+      )
+    end
+
+    # 创建 Chatbot 回复消息
+    chatbot_message = conversation.messages.create(
+      user: 'Chatbot',
+      text: '这是我的固定回复',
+      created_at: Time.now,
+      updated_at: Time.now,
+      user_id: nil
+    )
+
+    # 返回新创建的消息和 Chatbot 回复消息
+    render json: { messages: [chatbot_message] }, status: :ok
+  end
+
   private
 
   # 加载当前用户的所有会话
