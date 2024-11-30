@@ -28,7 +28,7 @@ Rails.application.routes.draw do
   post 'api/chat', to: 'chat#index'
 
   # 添加用于创建新会话的路由
-  post 'chat/new', to: 'chat#create', as: 'new_conversation'
+  post 'api/chat/new', to: 'chat#create', as: 'new_conversation'
 
   # API 聊天相关路由
   post 'api/chat/:id/update', to: 'chat#update'
@@ -46,5 +46,5 @@ Rails.application.routes.draw do
 #     }
 #   ]
 # }'
-  delete 'chat/:id', to: 'chat#destroy'
+  delete 'api/chat/:id', to: 'chat#destroy'
 end

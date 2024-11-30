@@ -1,5 +1,3 @@
-# app/controllers/chat_controller.rb
-
 class ChatController < ApplicationController
   before_action :authenticate_user!  # 确保用户已登录
   before_action :load_user_conversations, only: [:index, :show]
@@ -33,7 +31,7 @@ class ChatController < ApplicationController
 
   # 显示特定会话
   def show
-    @current_conversation = Conversation.find_by(id: params[:id])
+    @current_conversation = Conversation.find_by(id: params[:id], isDelete: false)
 
     if @current_conversation.nil?
       render json: { error: '未找到会话' }, status: :not_found
@@ -53,13 +51,13 @@ class ChatController < ApplicationController
     render json: { id: new_conversation.id, messages: new_conversation.messages }, status: :created
   end
 
-  # 删除会话
+  # 删除会话（标记为删除）
   def destroy
     conversation = current_user.conversations.find_by(id: params[:id])
 
     if conversation
-      conversation.destroy
-      render json: { message: '会话已删除' }, status: :ok
+      conversation.update(isDelete: true)
+      render json: { message: '会话已标记为删除' }, status: :ok
     else
       render json: { error: '未找到会话' }, status: :not_found
     end
@@ -67,13 +65,13 @@ class ChatController < ApplicationController
 
   # 获取所有会话 ID
   def conversations
-    conversation_ids = current_user.conversations.pluck(:id)
+    conversation_ids = current_user.conversations.where(isDelete: false).pluck(:id)
     render json: { conversation_ids: conversation_ids }
   end
 
   # 更新会话（添加新消息）
   def update
-    conversation = current_user.conversations.find_by(id: params[:id])
+    conversation = current_user.conversations.find_by(id: params[:id], isDelete: false)
 
     if conversation.nil?
       render json: { error: '未找到会话' }, status: :not_found
@@ -116,7 +114,7 @@ class ChatController < ApplicationController
 
   # 加载当前用户的所有会话
   def load_user_conversations
-    @conversations = Conversation.where(user_id: @current_user.id)
+    @conversations = Conversation.where(user_id: @current_user.id, isDelete: false)
   end
 
   # 保存当前会话的消息

@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_10_153458) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_29_154032) do
   create_table "conversations", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
+    t.boolean "isDelete", default: false, null: false
     t.index ["user_id"], name: "index_conversations_on_user_id"
   end
 
