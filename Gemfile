@@ -33,8 +33,11 @@ gem "bootsnap", require: false
 
 gem 'rack-cors' #为了允许前端应用访问 Rails API
 
+gem 'bcrypt', '~> 3.1.7'
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
+
+gem 'jwt'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -47,9 +50,13 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 end
 
-group :development do
+group :development, :test do
   # Use console on exceptions pages [https://github.com/rails/web-console]
-  gem "web-console"
+  gem 'rspec-rails', '~> 5.0'
+end
+
+group :development do
+  gem 'web-console'
 end
 
 group :test do

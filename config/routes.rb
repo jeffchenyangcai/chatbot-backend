@@ -33,6 +33,12 @@ Rails.application.routes.draw do
   # API 聊天相关路由
   post 'api/chat/:id/update', to: 'chat#update'
 
+  # API 登陆注册相关路由
+  post 'api/login/account', to: 'user#login'
+
+  post 'api/register', to: 'user#register'
+
+  post 'api/login/outLogin', to: 'user#out_login'
 #   curl -X PUT http://localhost:3000/chat/1 \
 #     -H "Content-Type: application/json" \
 #     -d '{
