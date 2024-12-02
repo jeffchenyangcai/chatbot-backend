@@ -39,6 +39,9 @@ Rails.application.routes.draw do
   post 'api/register', to: 'user#register'
 
   post 'api/login/outLogin', to: 'user#out_login'
+
+  get '/api/currentUser', to: 'user#current_user'
+
 #   curl -X PUT http://localhost:3000/chat/1 \
 #     -H "Content-Type: application/json" \
 #     -d '{

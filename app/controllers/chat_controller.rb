@@ -114,7 +114,7 @@ class ChatController < ApplicationController
 
   # 加载当前用户的所有会话
   def load_user_conversations
-    @conversations = Conversation.where(user_id: @current_user.id, isDelete: false)
+    @conversations = Conversation.where(user_id: current_user.id, isDelete: false)
   end
 
   # 保存当前会话的消息
@@ -122,19 +122,23 @@ class ChatController < ApplicationController
     conversation.messages.create(messages)
   end
 
-  # MOCK获取当前用户（假设存在用户ID 1）
+  # 获取当前用户
   def current_user
-    # 假设使用一个 ID 为 1 的假用户
-    @current_user ||= User.find_or_create_by(id: 1) do |user|
-      user.username = 'testuser'
-      user.password_digest = 'password'  # 简单的密码，开发测试用
-    end
+    @current_user ||= User.find_by(id: decoded_token['user_id'])
   end
 
-  # 模拟用户认证（跳过实际认证）
+  # 解析 JWT 令牌
+  def decoded_token
+    token = request.headers['Authorization']&.split(' ')&.last
+    JWT.decode(token, Rails.application.secret_key_base, true, algorithm: 'HS256').first
+  rescue JWT::DecodeError
+    {}
+  end
+
+  # 用户认证
   def authenticate_user!
     unless current_user
-      redirect_to login_path, alert: '请先登录'
+      render json: { error: '请先登录' }, status: :unauthorized
     end
   end
 end

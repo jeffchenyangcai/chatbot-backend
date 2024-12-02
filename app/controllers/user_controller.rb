@@ -7,7 +7,8 @@ class UserController < ApplicationController
 
     if user && user.authenticate(params[:password])
       puts "Password matched"
-      render json: { status: 'ok', message: '登录成功', data: { userId: user.id, username: user.username, token: generate_token(user.id) } }, status: :ok
+      token = generate_token(user.id)
+      render json: { status: 'ok', message: '登录成功', data: { userId: user.id, username: user.username, token: token } }, status: :ok
     else
       puts "Password did not match"
       render json: { status: 'error', message: '用户名或密码错误' }, status: :unauthorized
@@ -49,6 +50,35 @@ class UserController < ApplicationController
     # 你可以在这里添加任何你需要在退出登录时执行的逻辑
     # 例如，清除用户的会话或令牌
     render json: { status: 'ok', message: '退出登录成功' }, status: :ok
+  end
+
+  # 获取当前用户接口
+  def current_user
+    token = request.headers['Authorization']&.split(' ')&.last
+    if token
+      begin
+        decoded_token = JWT.decode(token, Rails.application.secret_key_base, true, algorithm: 'HS256')
+        user_id = decoded_token.first['user_id']
+        user = User.find_by(id: user_id)
+
+        if user
+          # 构建用户详细信息
+          user_data = {
+            name: user.username,
+            access: "guest",
+            userid: user.id.to_s
+          }
+
+          render json: { success: true, data: user_data }, status: :ok
+        else
+          render json: { success: false, message: '用户不存在' }, status: :not_found
+        end
+      rescue JWT::DecodeError
+        render json: { success: false, message: '无效的令牌' }, status: :unauthorized
+      end
+    else
+      render json: { success: false, message: '缺少令牌' }, status: :unauthorized
+    end
   end
 
   private
