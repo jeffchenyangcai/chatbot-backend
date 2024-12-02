@@ -55,5 +55,6 @@ Rails.application.routes.draw do
 #     }
 #   ]
 # }'
+
   delete 'api/chat/:id', to: 'chat#destroy'
 end
