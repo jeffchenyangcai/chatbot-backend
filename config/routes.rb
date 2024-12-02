@@ -14,18 +14,47 @@ Rails.application.routes.draw do
 
   root 'chat#index'
 
+  # 获取所有的 conversationid
+  get 'api/conversations', to: 'chat#conversations'
+
   # 定义聊天页面的主路由
   get 'chat', to: 'chat#index'
 
   # 定义根据会话 ID 显示特定对话记录的路由
-  get 'conversations/:id', to: 'chat#show', as: 'conversation'
+  get 'api/chat/:id', to: 'chat#show', as: 'conversation'
   # 在视图中你可以用 conversation_path(1) 来生成 /conversations/1 的链接。
 
   # 添加一个 POST 路由用于发送消息
-  post 'chat', to: 'chat#index'
+  post 'api/chat', to: 'chat#index'
 
   # 添加用于创建新会话的路由
-  post 'conversations/new', to: 'chat#create', as: 'new_conversation'
+  post 'api/chat/new', to: 'chat#create', as: 'new_conversation'
 
-  delete 'conversations/:id', to: 'chat#destroy'
+  # API 聊天相关路由
+  post 'api/chat/:id/update', to: 'chat#update'
+
+  # API 登陆注册相关路由
+  post 'api/login/account', to: 'user#login'
+
+  post 'api/register', to: 'user#register'
+
+  post 'api/login/outLogin', to: 'user#out_login'
+
+  get '/api/currentUser', to: 'user#current_user'
+
+#   curl -X PUT http://localhost:3000/chat/1 \
+#     -H "Content-Type: application/json" \
+#     -d '{
+#   "messages": [
+#     {
+#       "user": "Chatbot",
+#       "text": "这是我的固定回复",
+#       "created_at": "2024-10-11T03:38:29.949Z",
+#       "updated_at": "2024-10-11T03:38:29.949Z",
+#       "user_id": null
+#     }
+#   ]
+# }'
+
+  delete 'api/chat/:id', to: 'chat#destroy'
 end

@@ -1,0 +1,202 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (mmap) failed to map 524288000 bytes for Failed to commit area from 0x000000060ce00000 to 0x000000062c200000 of length 524288000.
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   The process is running with CompressedOops enabled, and the Java Heap may be blocking the growth of the native heap
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (./src/hotspot/os/windows/os_windows.cpp:3624), pid=4652, tid=50028
+#
+# JRE version:  (11.0.14.1+1) (build )
+# Java VM: OpenJDK 64-Bit Server VM (11.0.14.1+1-b1751.46, mixed mode, sharing, tiered, compressed oops, g1 gc, windows-amd64)
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: git4idea.http.GitAskPassApp Username for 'https://github.com': 
+
+Host: AMD Ryzen 7 6800H with Radeon Graphics         , 16 cores, 31G,  Windows 11 , 64 bit Build 22621 (10.0.22621.4391)
+Time: Mon Dec  2 20:29:28 2024 中国标准时间 elapsed time: 0.018214 seconds (0d 0h 0m 0s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00000205dbe55800):  JavaThread "Unknown thread" [_thread_in_vm, id=50028, stack(0x000000e574e00000,0x000000e574f00000)]
+
+Stack: [0x000000e574e00000,0x000000e574f00000]
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x61601a]
+V  [jvm.dll+0x79c3b0]
+V  [jvm.dll+0x79d9cd]
+V  [jvm.dll+0x79e0a3]
+V  [jvm.dll+0x24ca38]
+V  [jvm.dll+0x613074]
+V  [jvm.dll+0x607d75]
+V  [jvm.dll+0x30b05b]
+V  [jvm.dll+0x30afca]
+V  [jvm.dll+0x30aea2]
+V  [jvm.dll+0x30fde6]
+V  [jvm.dll+0x35b473]
+V  [jvm.dll+0x35bb76]
+V  [jvm.dll+0x35b573]
+V  [jvm.dll+0x2e57b8]
+V  [jvm.dll+0x2e6967]
+V  [jvm.dll+0x779377]
+V  [jvm.dll+0x77ab6c]
+V  [jvm.dll+0x368a19]
+V  [jvm.dll+0x75ce8e]
+V  [jvm.dll+0x3d6aa3]
+V  [jvm.dll+0x3d8ff1]
+C  [jli.dll+0x536b]
+C  [ucrtbase.dll+0x29333]
+C  [KERNEL32.DLL+0x1259d]
+C  [ntdll.dll+0x5af38]
+
+
+---------------  P R O C E S S  ---------------
+
+Threads class SMR info:
+_java_thread_list=0x00000205d9bf9460, length=0, elements={
+}
+
+Java Threads: ( => current thread )
+
+Other Threads:
+  0x00000205dbe70000 GCTaskThread "GC Thread#0" [stack: 0x000000e574f00000,0x000000e575000000] [id=50040]
+  0x00000205dbeed800 ConcurrentGCThread "G1 Main Marker" [stack: 0x000000e575000000,0x000000e575100000] [id=49816]
+  0x00000205dbef0000 ConcurrentGCThread "G1 Conc#0" [stack: 0x000000e575100000,0x000000e575200000] [id=4016]
+
+[error occurred during error reporting (printing all threads), id 0xc0000005, EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ffc6ab15f37]
+
+VM state:not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
+[0x00000205dbe50f70] Heap_lock - owner thread: 0x00000205dbe55800
+
+Heap address: 0x000000060ce00000, size: 7986 MB, Compressed Oops mode: Non-zero based: 0x000000060ce00000
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 0
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+Events (1 events):
+Event: 0.013 Loaded shared library D:\0.install\RubyMine 2021.3.3\jbr\bin\zip.dll
+
+
+Dynamic libraries:
+0x00007ff6df770000 - 0x00007ff6df77a000 	D:\0.install\RubyMine 2021.3.3\jbr\bin\java.exe
+0x00007ffd90570000 - 0x00007ffd90787000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x00007ffd8f010000 - 0x00007ffd8f0d4000 	C:\WINDOWS\System32\KERNEL32.DLL
+0x00007ffd8d9a0000 - 0x00007ffd8dd59000 	C:\WINDOWS\System32\KERNELBASE.dll
+0x00007ffd8dd60000 - 0x00007ffd8de71000 	C:\WINDOWS\System32\ucrtbase.dll
+0x00007ffd4c0d0000 - 0x00007ffd4c0e9000 	D:\0.install\RubyMine 2021.3.3\jbr\bin\jli.dll
+0x00007ffd142b0000 - 0x00007ffd142c6000 	D:\0.install\RubyMine 2021.3.3\jbr\bin\VCRUNTIME140.dll
+0x00007ffd8f6a0000 - 0x00007ffd8f84e000 	C:\WINDOWS\System32\USER32.dll
+0x00007ffd8df20000 - 0x00007ffd8df46000 	C:\WINDOWS\System32\win32u.dll
+0x00007ffd75020000 - 0x00007ffd752b2000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.22621.4391_none_2715d37f73803e96\COMCTL32.dll
+0x00007ffd8f5f0000 - 0x00007ffd8f697000 	C:\WINDOWS\System32\msvcrt.dll
+0x00007ffd90220000 - 0x00007ffd90249000 	C:\WINDOWS\System32\GDI32.dll
+0x00007ffd8dfd0000 - 0x00007ffd8e0eb000 	C:\WINDOWS\System32\gdi32full.dll
+0x00007ffd8de80000 - 0x00007ffd8df1a000 	C:\WINDOWS\System32\msvcp_win.dll
+0x00007ffd8fa60000 - 0x00007ffd8fa91000 	C:\WINDOWS\System32\IMM32.DLL
+0x00007ffc9b0e0000 - 0x00007ffc9b18a000 	D:\0.install\RubyMine 2021.3.3\jbr\bin\msvcp140.dll
+0x00007ffc6a820000 - 0x00007ffc6b39a000 	D:\0.install\RubyMine 2021.3.3\jbr\bin\server\jvm.dll
+0x00007ffd8fc40000 - 0x00007ffd8fcf2000 	C:\WINDOWS\System32\ADVAPI32.dll
+0x00007ffd8f8d0000 - 0x00007ffd8f977000 	C:\WINDOWS\System32\sechost.dll
+0x00007ffd8e0f0000 - 0x00007ffd8e118000 	C:\WINDOWS\System32\bcrypt.dll
+0x00007ffd8e660000 - 0x00007ffd8e774000 	C:\WINDOWS\System32\RPCRT4.dll
+0x00007ffd8e290000 - 0x00007ffd8e298000 	C:\WINDOWS\System32\PSAPI.DLL
+0x00007ffd65df0000 - 0x00007ffd65df9000 	C:\WINDOWS\SYSTEM32\WSOCK32.dll
+0x00007ffd87240000 - 0x00007ffd87274000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x00007ffd80060000 - 0x00007ffd8006a000 	C:\WINDOWS\SYSTEM32\VERSION.dll
+0x00007ffd8f850000 - 0x00007ffd8f8c1000 	C:\WINDOWS\System32\WS2_32.dll
+0x00007ffd8c960000 - 0x00007ffd8c978000 	C:\WINDOWS\SYSTEM32\kernel.appcore.dll
+0x00007ffd61d80000 - 0x00007ffd61d91000 	D:\0.install\RubyMine 2021.3.3\jbr\bin\verify.dll
+0x00007ffd8aec0000 - 0x00007ffd8b0f2000 	C:\WINDOWS\SYSTEM32\DBGHELP.DLL
+0x00007ffd8fdb0000 - 0x00007ffd9013f000 	C:\WINDOWS\System32\combase.dll
+0x00007ffd8f980000 - 0x00007ffd8fa57000 	C:\WINDOWS\System32\OLEAUT32.dll
+0x00007ffd7fb50000 - 0x00007ffd7fb82000 	C:\WINDOWS\SYSTEM32\dbgcore.DLL
+0x00007ffd8df50000 - 0x00007ffd8dfcb000 	C:\WINDOWS\System32\bcryptPrimitives.dll
+0x00007ffd4b7d0000 - 0x00007ffd4b7f9000 	D:\0.install\RubyMine 2021.3.3\jbr\bin\java.dll
+0x00007ffd62e80000 - 0x00007ffd62e8b000 	D:\0.install\RubyMine 2021.3.3\jbr\bin\jimage.dll
+0x00007ffd4b7b0000 - 0x00007ffd4b7c9000 	D:\0.install\RubyMine 2021.3.3\jbr\bin\zip.dll
+
+dbghelp: loaded successfully - version: 4.0.5 - missing functions: none
+symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;D:\0.install\RubyMine 2021.3.3\jbr\bin;C:\WINDOWS\SYSTEM32;C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.22621.4391_none_2715d37f73803e96;D:\0.install\RubyMine 2021.3.3\jbr\bin\server
+
+VM Arguments:
+java_command: git4idea.http.GitAskPassApp Username for 'https://github.com': 
+java_class_path (initial): D:/0.install/RubyMine 2021.3.3/plugins/git4idea/lib/git4idea-rt.jar;D:/0.install/RubyMine 2021.3.3/lib/3rd-party.jar;D:/0.install/RubyMine 2021.3.3/lib/3rd-party-rt.jar
+Launcher Type: SUN_STANDARD
+
+[Global flags]
+     intx CICompilerCount                          = 12                                        {product} {ergonomic}
+     uint ConcGCThreads                            = 3                                         {product} {ergonomic}
+     uint G1ConcRefinementThreads                  = 13                                        {product} {ergonomic}
+   size_t G1HeapRegionSize                         = 2097152                                   {product} {ergonomic}
+    uintx GCDrainStackTargetSize                   = 64                                        {product} {ergonomic}
+   size_t InitialHeapSize                          = 524288000                                 {product} {ergonomic}
+   size_t MarkStackSize                            = 4194304                                   {product} {ergonomic}
+   size_t MaxHeapSize                              = 8373927936                                {product} {ergonomic}
+   size_t MinHeapDeltaBytes                        = 2097152                                   {product} {ergonomic}
+    uintx NonNMethodCodeHeapSize                   = 7594288                                {pd product} {ergonomic}
+    uintx NonProfiledCodeHeapSize                  = 122031976                              {pd product} {ergonomic}
+    uintx ProfiledCodeHeapSize                     = 122031976                              {pd product} {ergonomic}
+    uintx ReservedCodeCacheSize                    = 251658240                              {pd product} {ergonomic}
+     bool SegmentedCodeCache                       = true                                      {product} {ergonomic}
+     bool UseCompressedClassPointers               = true                                 {lp64_product} {ergonomic}
+     bool UseCompressedOops                        = true                                 {lp64_product} {ergonomic}
+     bool UseG1GC                                  = true                                      {product} {ergonomic}
+     bool UseLargePagesIndividualAllocation        = false                                  {pd product} {ergonomic}
+
+Logging:
+Log output configuration:
+ #0: stdout all=warning uptime,level,tags
+ #1: stderr all=off uptime,level,tags
+
+Environment Variables:
+JAVA_HOME=E:\5.env\java_env\jdk17
+CLASSPATH=E:\5.env\java_env\jdk17\lib\dt.jar;E:\5.env\java_env\jdk17\lib\tools.jar
+PATH=E:/install/Git/mingw64/libexec/git-core;E:/install/Git/mingw64/libexec/git-core;E:\install\Git\mingw64\bin;E:\install\Git\usr\bin;C:\Users\YoungMa\bin;E:\5.env\ruby_env\Ruby33\bin;E:\install\VMware\bin\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\Bandizip\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;E:\5.env\java_env\jdk17\bin;%JRE_HOME%\bin;C:\strawberry\c\bin;C:\strawberry\perl\bin;%MAVEN_HOME%\bin;D:\Java_env\chromedriver_win32;D:\anaconda3;D:\anaconda3\Library\bin;D:\anaconda3\Scripts;E:\install\xshell\;E:\install\Git\cmd;E:\5.env\nodejs_env\nodejs\;E:\5.env\apktool;C:\Program Files\dotnet\;C:\Program Files\Calibre2\;E:\5.env\maven_env\maven_3.9.7\apache-maven-3.9.7\bin;E:\install\my_010 Editor;E:\8.download\huggingface_download;E:\5.env\Sqlite3;C:\Users\YoungMa\AppData\Local\Microsoft\WindowsApps;C:\Users\YoungMa\AppData\Local\GitHubDesktop\bin;E:\5.env\nodejs_env\node_global;E:\5.env\maven_env\maven_3.9.7\apache-maven-3.9.7\bin;D:\0.install\Microsoft VS Code\bin
+USERNAME=YoungMa
+DISPLAY=:0.0
+LC_ALL=en_US.UTF-8
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 11 , 64 bit Build 22621 (10.0.22621.4391)
+OS uptime: 1 days 9:04 hours
+Hyper-V role detected
+
+CPU:total 16 (initial active 16) (16 cores per cpu, 2 threads per core) family 25 model 68 stepping 1 microcode 0x0, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, mmxext, 3dnowpref, lzcnt, sse4a, ht, tsc, tscinvbit, tscinv, bmi1, bmi2, adx, sha, fma
+
+Memory: 4k page, system-wide physical 31940M (7717M free)
+TotalPageFile size 39940M (AvailPageFile size 209M)
+current process WorkingSet (physical memory assigned to process): 12M, peak: 12M
+current process commit charge ("private bytes"): 71M, peak: 571M
+
+vm_info: OpenJDK 64-Bit Server VM (11.0.14.1+1-b1751.46) for windows-amd64 JRE (11.0.14.1+1-b1751.46), built on Feb 21 2022 15:19:20 by "" with MS VC++ 14.0 (VS2015)
+
+END.
