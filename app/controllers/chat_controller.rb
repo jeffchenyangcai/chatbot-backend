@@ -83,6 +83,9 @@ class ChatController < ApplicationController
 
     @messages = @current_conversation.messages
 
+
+
+
     render json: { messages: @messages }
   end
 
