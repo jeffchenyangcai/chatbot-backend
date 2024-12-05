@@ -34,8 +34,9 @@ class ChatController < ApplicationController
       # 为每个消息添加 answerId
       numbered_messages = collected_messages.each_with_index.map do |message, index|
         {
-          answerId: index + 1,
-          content: message.text
+          collectId: index + 1,
+          content: message.text,
+          answerId:message.id,
         }
       end
 
@@ -142,7 +143,7 @@ class ChatController < ApplicationController
         text: message[:text],
         created_at: message[:created_at],
         updated_at: message[:updated_at],
-        user_id: message[:user_id]
+        user_id: decoded_token['user_id']
       )
 
 
