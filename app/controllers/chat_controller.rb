@@ -153,7 +153,7 @@ class ChatController < ApplicationController
     # 构建请求头
     headers = {
       'Content-Type' => 'application/json',
-      'Authorization' => " "  # 请填写您自己的APIKey
+      'Authorization' => "8ca9dd8f25c35dbb7c68511c2a718f07.EWWMOmKkVNQyb77s"  # 请填写您自己的APIKey
     }
 
     # 构建请求体
