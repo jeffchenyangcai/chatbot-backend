@@ -22,9 +22,17 @@ class UserController < ApplicationController
     confirm_password = params[:confirmPassword]
     auto_login = params[:autoLogin]
     type = params[:type]
+    user = User.find_by(username: params[:username])
 
+    if user
+      # 如果用户名已存在，返回422错误
+      Rails.logger.error("Username already exists: #{username}") #to_delete
+      render json: { error: 'Username already exists' }, status: :unprocessable_entity
+      return
+    end
     # 验证密码是否一致
     if password != confirm_password
+      Rails.logger.error("Passwords do not match: #{password} != #{confirm_password}") #to_delete
       render json: { error: "Passwords do not match" }, status: :unprocessable_entity
       return
     end
@@ -42,6 +50,8 @@ class UserController < ApplicationController
 
       render json: { message: "User registered successfully", user: user }, status: :created
     else
+      error_messages = user.errors.full_messages.join(', ')
+      Rails.logger.error("User registration failed: #{error_messages}") #to_delete
       render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
     end
   end
