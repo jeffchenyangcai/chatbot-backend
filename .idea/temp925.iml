@@ -58,7 +58,6 @@
     <orderEntry type="library" scope="PROVIDED" name="diff-lcs (v1.5.1, ruby-3.3.5-p100) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="drb (v2.2.1, ruby-3.3.5-p100) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="erubi (v1.13.0, ruby-3.3.5-p100) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="fiddle (v1.1.2, ruby-3.3.5-p100) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="globalid (v1.2.1, ruby-3.3.5-p100) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="i18n (v1.14.6, ruby-3.3.5-p100) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="importmap-rails (v2.0.1, ruby-3.3.5-p100) [gem]" level="application" />
@@ -74,7 +73,6 @@
     <orderEntry type="library" scope="PROVIDED" name="marcel (v1.0.4, ruby-3.3.5-p100) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="matrix (v0.4.2, ruby-3.3.5-p100) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="mini_mime (v1.1.5, ruby-3.3.5-p100) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="mini_portile2 (v2.8.7, ruby-3.3.5-p100) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="minitest (v5.25.1, ruby-3.3.5-p100) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="msgpack (v1.7.2, ruby-3.3.5-p100) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="net-imap (v0.4.16, ruby-3.3.5-p100) [gem]" level="application" />
@@ -209,101 +207,101 @@
   </component>
   <component name="RailsPaths" isManagedAutomatically="true">
     <entry key="app">
-      <value>file://$MODULE_DIR$/../temp925\app</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\app</value>
     </entry>
     <entry key="app/assets">
-      <value>file://$MODULE_DIR$/../temp925\app/assets</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\app/assets</value>
     </entry>
     <entry key="app/channels">
-      <value>file://$MODULE_DIR$/../temp925\app/channels</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\app/channels</value>
     </entry>
     <entry key="app/controllers">
-      <value>file://$MODULE_DIR$/../temp925\app/controllers</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\app/controllers</value>
     </entry>
     <entry key="app/helpers">
-      <value>file://$MODULE_DIR$/../temp925\app/helpers</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\app/helpers</value>
     </entry>
     <entry key="app/mailers">
-      <value>file://$MODULE_DIR$/../temp925\app/mailers</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\app/mailers</value>
     </entry>
     <entry key="app/models">
-      <value>file://$MODULE_DIR$/../temp925\app/models</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\app/models</value>
     </entry>
     <entry key="app/views">
-      <value>file://$MODULE_DIR$/../temp925\app/views</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\app/views</value>
     </entry>
     <entry key="config">
-      <value>file://$MODULE_DIR$/../temp925\config</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\config</value>
     </entry>
     <entry key="config/cable">
-      <value>file://$MODULE_DIR$/../temp925\config/cable.yml</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\config/cable.yml</value>
     </entry>
     <entry key="config/database">
-      <value>file://$MODULE_DIR$/../temp925\config/database.yml</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\config/database.yml</value>
     </entry>
     <entry key="config/environment">
-      <value>file://$MODULE_DIR$/../temp925\config/environment.rb</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\config/environment.rb</value>
     </entry>
     <entry key="config/environments">
-      <value>file://$MODULE_DIR$/../temp925\config/environments</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\config/environments</value>
     </entry>
     <entry key="config/initializers">
-      <value>file://$MODULE_DIR$/../temp925\config/initializers</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\config/initializers</value>
     </entry>
     <entry key="config/locales">
-      <value>file://$MODULE_DIR$/../temp925\config/locales</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\config/locales</value>
     </entry>
     <entry key="config/routes">
-      <value>file://$MODULE_DIR$/../temp925\config/routes</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\config/routes</value>
     </entry>
     <entry key="config/routes.rb">
-      <value>file://$MODULE_DIR$/../temp925\config/routes.rb</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\config/routes.rb</value>
     </entry>
     <entry key="db">
-      <value>file://$MODULE_DIR$/../temp925\db</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\db</value>
     </entry>
     <entry key="db/migrate">
-      <value>file://$MODULE_DIR$/../temp925\db/migrate</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\db/migrate</value>
     </entry>
     <entry key="db/seeds.rb">
-      <value>file://$MODULE_DIR$/../temp925\db/seeds.rb</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\db/seeds.rb</value>
     </entry>
     <entry key="lib">
-      <value>file://$MODULE_DIR$/../temp925\lib</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\lib</value>
     </entry>
     <entry key="lib/assets">
-      <value>file://$MODULE_DIR$/../temp925\lib/assets</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\lib/assets</value>
     </entry>
     <entry key="lib/tasks">
-      <value>file://$MODULE_DIR$/../temp925\lib/tasks</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\lib/tasks</value>
     </entry>
     <entry key="lib/templates">
-      <value>file://$MODULE_DIR$/../temp925\lib/templates</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\lib/templates</value>
     </entry>
     <entry key="log">
-      <value>file://$MODULE_DIR$/../temp925\log/development.log</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\log/development.log</value>
     </entry>
     <entry key="public">
-      <value>file://$MODULE_DIR$/../temp925\public</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\public</value>
     </entry>
     <entry key="public/javascripts">
-      <value>file://$MODULE_DIR$/../temp925\public/javascripts</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\public/javascripts</value>
     </entry>
     <entry key="public/stylesheets">
-      <value>file://$MODULE_DIR$/../temp925\public/stylesheets</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\public/stylesheets</value>
     </entry>
     <entry key="test/mailers/previews">
       <value>file://$MODULE_DIR$/test/mailers/previews</value>
-      <value>file://$MODULE_DIR$/../temp925\test/mailers/previews</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\test/mailers/previews</value>
     </entry>
     <entry key="tmp">
-      <value>file://$MODULE_DIR$/../temp925\tmp</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\tmp</value>
     </entry>
     <entry key="vendor">
-      <value>file://$MODULE_DIR$/../temp925\vendor</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\vendor</value>
     </entry>
     <entry key="vendor/assets">
-      <value>file://$MODULE_DIR$/../temp925\vendor/assets</value>
+      <value>file://$MODULE_DIR$/../chatbot-backend\vendor/assets</value>
     </entry>
   </component>
   <component name="RakeTasksCache-v2">
