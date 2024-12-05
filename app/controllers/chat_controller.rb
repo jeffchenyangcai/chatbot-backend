@@ -1,7 +1,49 @@
 class ChatController < ApplicationController
   before_action :authenticate_user!  # 确保用户已登录
   before_action :load_user_conversations, only: [:index, :show]
+  # 获取当前用户收藏的消息
+  #
+  def collect_message
+    # 找到对应的消息
+    message = Message.find_by(id: params[:id])
+    puts message
+    if message
+      # 更新 is_collected 字段为 1
+      if message.update(is_collected: params[:is_collected])
+        puts "收藏成功"
+        render json: { message: '收藏状态更新成功', data: message }, status: :ok
+      else
+        render json: { error: '更新失败，请重试' }, status: :unprocessable_entity
+      end
+    else
+      render json: { error: '消息未找到' }, status: :not_found
+    end
+  end
 
+  def collect
+    # 获取当前用户的 ID
+    user_id = current_user.id
+
+    # 查询所有 is_collected = 1 且 user_id = 当前用户 ID 的消息
+    collected_messages = Message.where(user_id: user_id, is_collected: true)
+
+    # 对返回的消息进行编号，并返回符合条件的记录
+    if collected_messages.empty?
+      render json: { messages: [] }, status: :ok
+    else
+      # 为每个消息添加 answerId
+      numbered_messages = collected_messages.each_with_index.map do |message, index|
+        {
+          answerId: index + 1,
+          content: message.text
+        }
+      end
+
+      # 返回带有编号的消息
+      render json: { messages: numbered_messages }, status: :ok
+      puts numbered_messages
+    end
+  end
   def index
     # 默认加载显示最近的一次会话
     @current_conversation = @conversations.last
@@ -72,6 +114,11 @@ class ChatController < ApplicationController
   # 更新会话（添加新消息）
   def update
     conversation = current_user.conversations.find_by(id: params[:id], isDelete: false)
+    @current_user ||= User.find_by(id: decoded_token['user_id'])
+    puts "in update"
+    puts decoded_token['user_id']
+    puts "***************************************************************"
+    puts @current_user
 
     if conversation.nil?
       render json: { error: '未找到会话' }, status: :not_found
@@ -87,7 +134,9 @@ class ChatController < ApplicationController
     end
 
     # 创建新消息并保存到数据库
+    # chatbot_message=nil
     new_messages = messages.map do |message|
+      puts message
       conversation.messages.create(
         user: message[:user],
         text: message[:text],
@@ -95,15 +144,16 @@ class ChatController < ApplicationController
         updated_at: message[:updated_at],
         user_id: message[:user_id]
       )
-    end
 
+
+    end
     # 创建 Chatbot 回复消息
     chatbot_message = conversation.messages.create(
       user: 'Chatbot',
       text: '这是我的固定回复',
       created_at: Time.now,
       updated_at: Time.now,
-      user_id: nil
+      user_id: decoded_token['user_id']
     )
 
     # 返回新创建的消息和 Chatbot 回复消息
@@ -141,4 +191,7 @@ class ChatController < ApplicationController
       render json: { error: '请先登录' }, status: :unauthorized
     end
   end
+
+
+
 end

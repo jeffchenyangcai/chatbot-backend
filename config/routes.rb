@@ -42,6 +42,9 @@ Rails.application.routes.draw do
 
   get '/api/currentUser', to: 'user#current_user'
 
+  # 新增 /api/collect 路由
+  get 'api/collect', to: 'chat#collect'
+
 #   curl -X PUT http://localhost:3000/chat/1 \
 #     -H "Content-Type: application/json" \
 #     -d '{
@@ -55,6 +58,6 @@ Rails.application.routes.draw do
 #     }
 #   ]
 # }'
-
+  patch '/api/messages/:ansid', to: 'messages#collect_message'
   delete 'api/chat/:id', to: 'chat#destroy'
 end
