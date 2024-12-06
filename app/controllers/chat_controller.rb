@@ -74,10 +74,17 @@ class ChatController < ApplicationController
 
   # 显示特定会话
   def show
+    # 查找会话
     @current_conversation = Conversation.find_by(id: params[:id], isDelete: false)
 
     if @current_conversation.nil?
       render json: { error: '未找到会话' }, status: :not_found
+      return
+    end
+
+    # 检查当前用户的 id 是否与 conversation 对应的用户匹配
+    if @current_conversation.user_id != current_user.id
+      render json: { error: '无权限访问该会话' }, status: :forbidden
       return
     end
 
@@ -153,7 +160,7 @@ class ChatController < ApplicationController
     # 构建请求头
     headers = {
       'Content-Type' => 'application/json',
-      'Authorization' => "TODO"  # 请填写您自己的APIKey
+      'Authorization' => "8ca9dd8f25c35dbb7c68511c2a718f07.EWWMOmKkVNQyb77s"  # 请填写您自己的APIKey
     }
 
     # 构建请求体
