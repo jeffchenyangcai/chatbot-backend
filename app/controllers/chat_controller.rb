@@ -83,9 +83,6 @@ class ChatController < ApplicationController
 
     @messages = @current_conversation.messages
 
-
-
-
     render json: { messages: @messages }
   end
 
@@ -116,13 +113,12 @@ class ChatController < ApplicationController
   end
 
   # 更新会话（添加新消息）
+  require 'net/http'
+  require 'json'
+
   def update
     conversation = current_user.conversations.find_by(id: params[:id], isDelete: false)
     @current_user ||= User.find_by(id: decoded_token['user_id'])
-    puts "in update"
-    puts decoded_token['user_id']
-    puts "***************************************************************"
-    puts @current_user
 
     if conversation.nil?
       render json: { error: '未找到会话' }, status: :not_found
@@ -138,9 +134,7 @@ class ChatController < ApplicationController
     end
 
     # 创建新消息并保存到数据库
-    # chatbot_message=nil
     new_messages = messages.map do |message|
-      puts message
       conversation.messages.create(
         user: message[:user],
         text: message[:text],
@@ -148,13 +142,46 @@ class ChatController < ApplicationController
         updated_at: message[:updated_at],
         user_id: decoded_token['user_id']
       )
-
-
     end
-    # 创建 Chatbot 回复消息
+
+    # 获取用户消息的文本内容
+    user_message_text = messages.last[:text]
+
+    # ZhipuAI API的URL
+    url = URI("https://open.bigmodel.cn/api/paas/v4/chat/completions")
+
+    # 构建请求头
+    headers = {
+      'Content-Type' => 'application/json',
+      'Authorization' => "8ca9dd8f25c35dbb7c68511c2a718f07.EWWMOmKkVNQyb77s"  # 请填写您自己的APIKey
+    }
+
+    # 构建请求体
+    request_body = {
+      model: "glm-4-flash",  # 请填写您要调用的模型名称
+      messages: [
+        { role: "user", content: user_message_text }
+      ]
+    }.to_json
+
+    # 发送HTTP POST请求
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+    request = Net::HTTP::Post.new(url, headers)
+    request.body = request_body
+
+    response = http.request(request)
+
+    # 解析API响应
+    response_body = JSON.parse(response.body)
+
+    # 获取生成的回复
+    chatbot_response = response_body['choices'][0]['message']['content']
+
+    # 创建 Chatbot 回复消息并保存到数据库
     chatbot_message = conversation.messages.create(
       user: 'Chatbot',
-      text: '这是我的固定回复',
+      text: chatbot_response,
       created_at: Time.now,
       updated_at: Time.now,
       user_id: decoded_token['user_id']
