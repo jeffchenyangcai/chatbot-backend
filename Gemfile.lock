@@ -146,6 +146,8 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.3)
+    nokogiri (1.16.7-x64-mingw-ucrt)
+      racc (~> 1.4)
     nokogiri (1.16.7-x86-mingw32)
       racc (~> 1.4)
     nokogiri (1.16.7-x86_64-linux)
@@ -270,6 +272,7 @@ GEM
       sprockets (>= 3.0.0)
     sqlite3 (2.0.4)
       mini_portile2 (~> 2.8.0)
+    sqlite3 (2.0.4-x64-mingw-ucrt)
     sqlite3 (2.0.4-x86_64-linux-gnu)
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
@@ -300,6 +303,7 @@ GEM
     zeitwerk (2.6.18)
 
 PLATFORMS
+  x64-mingw-ucrt
   x86-mingw32
   x86_64-linux
 
