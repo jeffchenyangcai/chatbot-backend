@@ -3,12 +3,16 @@ class MessagesController < ApplicationController
   # 更新消息的 is_collected 字段
   def collect_message
     # 根据 params[:ansid] 获取对应的消息
-    message = Message.find_by(id: params[:ansid])
+    message = Message.find_by(id: params[:answerId])
 
     if message
-      # 更新 is_collected 字段
-      if message.update(is_collected: true)
-        render json: { message: '消息已收藏' }, status: :ok
+      # 根据传入的 is_collected 状态来更新收藏状态
+      new_status = params[:is_collected] === 1 ? true : false  # '1' 转换为 false, '0' 转换为 true
+      # new_status = params[:is_collected]
+      puts "传入的当前状态是#{params[:is_collected]}, 变更为: #{new_status}"
+      if message.update(is_collected: new_status)
+        render json: { message: "消息已#{new_status ? '收藏' : '取消收藏'}" }, status: :ok
+        puts "消息已#{new_status ? '收藏' : '取消收藏'}"
       else
         render json: { error: '更新失败' }, status: :unprocessable_entity
       end
@@ -20,7 +24,7 @@ class MessagesController < ApplicationController
 
   # 删除收藏状态
   def delete
-    @message = Message.find(params[:ansid])
+    @message = Message.find(params[:answerId])
     puts "************************************************"
     puts @message
     if @message.update(is_collected: 0)  # 假设 0 表示取消收藏
@@ -54,6 +58,4 @@ class MessagesController < ApplicationController
     puts "验证后的用户id:" +decoded_token['user_id']
     @current_user ||= User.find_by(id: decoded_token['user_id'])
   end
-
-
 end

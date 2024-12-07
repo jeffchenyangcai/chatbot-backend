@@ -62,7 +62,7 @@ Rails.application.routes.draw do
 #     }
 #   ]
 # }'
-  patch '/api/messages/:ansid/collect', to: 'messages#collect_message'
-  patch '/api/messages/:ansid/delete', to: 'messages#delete'
+  patch '/api/messages/:answerId/collect', to: 'messages#collect_message'
+  patch '/api/messages/:answerId/delete', to: 'messages#delete'
   delete 'api/chat/:id', to: 'chat#destroy'
 end
