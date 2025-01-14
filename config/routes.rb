@@ -62,11 +62,16 @@ Rails.application.routes.draw do
 #     }
 #   ]
 # }'
+  resources :knowledge_bases do
+    # 嵌套对话历史路由
+    resources :messages, controller: 'rag', only: [:create, :index]
+  end
   post '/api/knowledge_bases', to: 'knowledge_bases#create'
   get '/api/knowledge_bases', to: 'knowledge_bases#index'
   post '/api/knowledge_bases/upload_and_process', to: 'knowledge_bases#upload_and_process'
   post '/api/rag_query', to: 'rag#query'
   patch '/api/messages/:ansid/collect', to: 'messages#collect_message'
   patch '/api/messages/:ansid/delete', to: 'messages#delete'
+  get '/api/knowledge_bases/:knowledge_base_id/history', to: 'rag#history'
   delete 'api/chat/:id', to: 'chat#destroy'
 end

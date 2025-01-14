@@ -44,7 +44,27 @@ class KnowledgeBasesController < ApplicationController
       render json: { success: false, message: '未上传任何文件' }, status: 400
       return
     end
+    Array(uploaded_files).each do |file|
+      # 若只允许文本文件，可以加一个验证，比如：
+      if file.content_type != 'text/plain'
+        render json: { success: false, message: '所有文件必须是文本文件 (.txt)' }, status: :bad_request
+        return
+      end
+      knowledge_base = KnowledgeBase.find_by(id: knowledge_base_id, user_id: current_user.id)
 
+      # 读取文件内容
+      file_content = File.read(file.tempfile)
+
+      # 写入数据库
+      file_record = FileRecord.create!(
+        knowledge_base_id: knowledge_base.id,
+        file_name: file.original_filename,
+        file_content: file_content,
+        created_at: Time.current,
+        updated_at: Time.current
+      )
+
+      end
     # 保存文件到本地
     saved_files = save_uploaded_files(uploaded_files)
 
@@ -67,7 +87,7 @@ class KnowledgeBasesController < ApplicationController
       )
 
       result = JSON.parse(response.body)
-
+      puts result
       if result['success']
         render json: { success: true, message: '文件处理完成' }
       else
